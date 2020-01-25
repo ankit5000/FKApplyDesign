@@ -19,5 +19,5 @@ To run the program in IntelliJ:
 
 
 
-P.S - Due to lack of a rookie mistake, all the feature branches were being merged with the master instead of dev.
+P.S - Due to a rookie mistake, all the feature branches were being merged with the master instead of dev.
 Apologies for that.
