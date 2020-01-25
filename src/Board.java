@@ -36,7 +36,7 @@ public class Board {
                 && cells[2][2].content == currState
                 || currentRow + currentCol == 2
                 && cells[0][2].content == currState
-                && cells[1][2].content == currState
+                && cells[1][1].content == currState
                 && cells[2][0].content == currState);
     }
 
