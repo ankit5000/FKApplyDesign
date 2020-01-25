@@ -61,7 +61,7 @@ public class Board {
             }
             System.out.println();
             if(row< ROWS-1){
-                System.out.println("--------------------");
+                System.out.println("-------------");
             }
         }
     }
