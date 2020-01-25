@@ -15,3 +15,9 @@ To run the program in IntelliJ:
   - Download all the files
   - Run the main class
   - Input on console to start the program
+
+
+
+
+P.S - Due to lack of a rookie mistake, all the feature branches were being merged with the master instead of dev.
+Apologies for that.
