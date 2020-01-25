@@ -5,6 +5,7 @@ public class TicTacToe {
     private Board board;
     private StatusOfGame gameStatus;
     private State curr;
+    private GameMode gameMode;
 
     private static Scanner in = new Scanner(System.in);
 
@@ -13,8 +14,18 @@ public class TicTacToe {
         board = new Board();
         initGame();
 
+        Boolean turnPlayer1 = true;
+
         do {
-            turnOfPlayer(curr);
+
+            if(gameMode == GameMode.HUMAN_TO_COMPUTER && turnPlayer1 == false){
+                System.out.println("Computer's turn");
+                turnOfComputer(curr);
+            }
+            else{
+                turnOfPlayer(curr);
+            }
+
             board.printGrid();
             check(curr);
 
@@ -27,17 +38,25 @@ public class TicTacToe {
             }
 
             curr = (curr == State.CROSS)? State.ZERO : State.CROSS;
+            turnPlayer1 = !turnPlayer1;
 
         }while(gameStatus == StatusOfGame.STILL_PLAYING);
     }
 
-    public void initGame(){
-        board.init();
-        curr = State.CROSS;
-        gameStatus = StatusOfGame.STILL_PLAYING;
+    private void turnOfComputer(State currState) {
+        for(int row = 0; row<board.ROWS; row++){
+            for(int col = 0; col<board.COLS; col++){
+                if(board.cells[row][col].content == State.EMPTY) {
+                    board.cells[row][col].content = currState;
+                    board.currentRow = row;
+                    board.currentCol = col;
+                    return;
+                }
+            }
+        }
     }
 
-    public void turnOfPlayer(State currState){
+    private void turnOfPlayer(State currState){
         boolean validInput = false;
         do {
             if(currState == currState.CROSS){
@@ -59,6 +78,15 @@ public class TicTacToe {
                         + "valid. Try again...");
             }
         } while(!validInput);
+    }
+
+    public void initGame(){
+        board.init();
+        curr = State.CROSS;
+        gameStatus = StatusOfGame.STILL_PLAYING;
+        System.out.println("Type h for Human to Human game and c for Human to Computer game: ");
+        String input = in.next();
+        gameMode = (input.equals("h"))? GameMode.HUMAN_TO_HUMAN:GameMode.HUMAN_TO_COMPUTER;
     }
 
     public void check(State currState){
