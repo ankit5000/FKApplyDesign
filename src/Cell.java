@@ -1,11 +1,11 @@
 public class Cell {
 
     State content;
-    int row, cel;
+    int row, col;
 
     public Cell(int row, int col){
         this.row = row;
-        this.cel = cel;
+        this.col = col;
         clear();
     }
 
@@ -13,7 +13,7 @@ public class Cell {
         content = State.EMPTY;
     }
 
-    public void paint(){
+    public void printCell(){
         switch(content){
             case CROSS: System.out.print(" X "); break;
             case ZERO:System.out.print(" 0 "); break;
