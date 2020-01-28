@@ -17,8 +17,7 @@ public class TicTacToe {
         board = new Board();
         initGame();
 
-
-        Boolean turnPlayer1 = true;
+        boolean turnPlayer1 = true;
 
         do {
 
@@ -69,15 +68,15 @@ public class TicTacToe {
                 System.out.println("0 won!! in the entire board.");
             }
             return;
-        };
+        }
         boardNumber++;
         System.out.println("switching to board no. " + boardNumber + 1);
         initGame();
     }
 
     private boolean isDrawBigBoard() {
-        for(int row=0; row<board.ROWS; ++row){
-            for(int col=0; col<board.COLS; ++col){
+        for(int row = 0; row< Board.ROWS; ++row){
+            for(int col = 0; col< Board.COLS; ++col){
                 if(bigBoard[row][col].content == State.EMPTY) {
                     return false;
                 }
@@ -106,17 +105,17 @@ public class TicTacToe {
     }
 
     private void initBigBoard() {
-        bigBoard = new Cell[board.ROWS][board.COLS];
-        for(int row=0; row<board.ROWS; ++row) {
-            for (int col = 0; col < board.COLS; ++col) {
+        bigBoard = new Cell[Board.ROWS][Board.COLS];
+        for(int row = 0; row< Board.ROWS; ++row) {
+            for (int col = 0; col < Board.COLS; ++col) {
                 bigBoard[row][col] = new Cell(row, col);
             }
         }
     }
 
     private void turnOfComputer(State currState) {
-        for(int row = 0; row<board.ROWS; row++){
-            for(int col = 0; col<board.COLS; col++){
+        for(int row = 0; row< Board.ROWS; row++){
+            for(int col = 0; col< Board.COLS; col++){
                 if(board.cells[row][col].content == State.EMPTY) {
                     board.cells[row][col].content = currState;
                     board.currentRow = row;
@@ -130,7 +129,7 @@ public class TicTacToe {
     private void turnOfPlayer(State currState){
         boolean validInput = false;
         do {
-            if(currState == currState.CROSS){
+            if(currState == State.CROSS){
                 System.out.print("Player 'X', enter your move(row[1-3] col[1-3]): ");
             } else {
                 System.out.print("Player '0', enter your move(row[1-3] col[1-3]): ");
