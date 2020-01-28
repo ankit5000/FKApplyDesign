@@ -9,10 +9,14 @@ public class TicTacToe {
 
     private static Scanner in = new Scanner(System.in);
 
+    int boardNumber = 0;
+    Cell[][] bigBoard;
 
     public TicTacToe(){
+        initBigBoard();
         board = new Board();
         initGame();
+
 
         Boolean turnPlayer1 = true;
 
@@ -30,17 +34,84 @@ public class TicTacToe {
             check(curr);
 
             if(gameStatus == StatusOfGame.CROSS_WON){
-                System.out.println("'X' won!!");
+                System.out.println("'X' won in this subBoard");
+                bigBoard[(boardNumber/3)][(boardNumber%3)].content = State.CROSS;
+                nextBoard(State.CROSS);
             } else if (gameStatus == StatusOfGame.ZERO_WON){
-                System.out.println("'0' won!!");
+                System.out.println("'0' won in this subBoard");
+                bigBoard[(boardNumber/3)][(boardNumber%3)].content = State.ZERO;
+                nextBoard(State.ZERO);
             } else if(gameStatus == StatusOfGame.DRAW){
-                System.out.println("It's draw!!");
+                System.out.println("It's draw in this subBoard");
+                bigBoard[(boardNumber/3)][(boardNumber%3)].content = State.EMPTY;
+                nextBoard(State.EMPTY);
             }
 
             curr = (curr == State.CROSS)? State.ZERO : State.CROSS;
             turnPlayer1 = !turnPlayer1;
 
         }while(gameStatus == StatusOfGame.STILL_PLAYING);
+    }
+
+    private void nextBoard(State whoWon) {
+        gameStatus = StatusOfGame.STILL_PLAYING;
+        if(isDrawBigBoard()){
+            gameStatus = StatusOfGame.DRAW;
+            System.out.println("It's a draw in the entire board.");
+            return;
+        }
+        if(checkBoard(whoWon)){
+            gameStatus = (whoWon == State.CROSS)? StatusOfGame.CROSS_WON:StatusOfGame.ZERO_WON;
+            if(gameStatus == StatusOfGame.CROSS_WON){
+                System.out.println("X won!! in the entire board.");
+            }
+            else if(gameStatus == StatusOfGame.ZERO_WON){
+                System.out.println("0 won!! in the entire board.");
+            }
+            return;
+        };
+        boardNumber++;
+        System.out.println("switching to board no. " + boardNumber + 1);
+        initGame();
+    }
+
+    private boolean isDrawBigBoard() {
+        for(int row=0; row<board.ROWS; ++row){
+            for(int col=0; col<board.COLS; ++col){
+                if(bigBoard[row][col].content == State.EMPTY) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean checkBoard(State currState) {
+        int currentRow = (boardNumber/3);
+        int currentCol = (boardNumber%3);
+        return(bigBoard[currentRow][0].content == currState
+                && bigBoard[currentRow][1].content == currState
+                && bigBoard[currentRow][2].content == currState
+                || bigBoard[0][currentCol].content == currState
+                && bigBoard[1][currentCol].content == currState
+                && bigBoard[2][currentCol].content == currState
+                || currentRow == currentCol
+                && bigBoard[0][0].content == currState
+                && bigBoard[1][1].content == currState
+                && bigBoard[2][2].content == currState
+                || currentRow + currentCol == 2
+                && bigBoard[0][2].content == currState
+                && bigBoard[1][1].content == currState
+                && bigBoard[2][0].content == currState);
+    }
+
+    private void initBigBoard() {
+        bigBoard = new Cell[board.ROWS][board.COLS];
+        for(int row=0; row<board.ROWS; ++row) {
+            for (int col = 0; col < board.COLS; ++col) {
+                bigBoard[row][col] = new Cell(row, col);
+            }
+        }
     }
 
     private void turnOfComputer(State currState) {
@@ -98,7 +169,6 @@ public class TicTacToe {
     }
 
     public static void main(String[] args) {
-
         new TicTacToe();
     }
 
