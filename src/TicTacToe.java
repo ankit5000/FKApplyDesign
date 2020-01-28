@@ -10,6 +10,9 @@ public class TicTacToe {
     private StatusOfGame gameStatus;
     private State curr;
     private GameMode gameMode;
+    int xScore = 0;
+    int zeroScore = 0;
+    int drawScore = 0;
 
     private static Scanner in = new Scanner(System.in);
 
@@ -55,17 +58,19 @@ public class TicTacToe {
             if(gameStatus == StatusOfGame.CROSS_WON){
                 System.out.println("'X' won in this subBoard");
                 bigBoard[(boardNumber/3)][(boardNumber%3)].content = State.CROSS;
+                xScore++;
                 nextBoard(State.CROSS);
             } else if (gameStatus == StatusOfGame.ZERO_WON){
                 System.out.println("'0' won in this subBoard");
                 bigBoard[(boardNumber/3)][(boardNumber%3)].content = State.ZERO;
+                zeroScore++;
                 nextBoard(State.ZERO);
             } else if(gameStatus == StatusOfGame.DRAW){
                 System.out.println("It's draw in this subBoard");
                 bigBoard[(boardNumber/3)][(boardNumber%3)].content = State.EMPTY;
+                drawScore++;
                 nextBoard(State.EMPTY);
             }
-
             curr = (curr == State.CROSS)? State.ZERO : State.CROSS;
             turnPlayer1 = !turnPlayer1;
 
@@ -81,6 +86,15 @@ public class TicTacToe {
     }
 
     private void nextBoard(State whoWon) {
+
+        System.out.println("Type \"stat\" for the current leaderboard else, press any key: ");
+        String showLeaderBoard = in.next();
+        if(showLeaderBoard.equals("stat")){
+            System.out.println("X's score: " + xScore);
+            System.out.println("0's score: " + zeroScore);
+            System.out.println("No. of draws: " + drawScore);
+        }
+
         gameStatus = StatusOfGame.STILL_PLAYING;
         if(isDrawBigBoard()){
             gameStatus = StatusOfGame.DRAW;
