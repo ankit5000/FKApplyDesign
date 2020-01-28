@@ -1,7 +1,11 @@
+import javafx.util.Pair;
+
 import java.util.Scanner;
+import java.util.Stack;
 
 public class TicTacToe {
 
+    boolean start = true;
     private Board board;
     private StatusOfGame gameStatus;
     private State curr;
@@ -12,7 +16,10 @@ public class TicTacToe {
     int boardNumber = 0;
     Cell[][] bigBoard;
 
+    Stack<Pair<Integer,Integer>> moves = new Stack<>();
+
     public TicTacToe(){
+
         initBigBoard();
         board = new Board();
         initGame();
@@ -20,6 +27,19 @@ public class TicTacToe {
         boolean turnPlayer1 = true;
 
         do {
+
+            if(!start) {
+                System.out.println("Type u for undo else, press any key: ");
+                String isUndo = in.next();
+                if(isUndo.equals("u")){
+                    undo();
+                    curr = (curr == State.CROSS)? State.ZERO : State.CROSS;
+                    turnPlayer1 = !turnPlayer1;
+                }
+            }
+            else{
+                start = false;
+            }
 
             if(gameMode == GameMode.HUMAN_TO_COMPUTER && turnPlayer1 == false){
                 System.out.println("Computer's turn");
@@ -52,6 +72,14 @@ public class TicTacToe {
         }while(gameStatus == StatusOfGame.STILL_PLAYING);
     }
 
+    private void undo() {
+        if(!moves.empty()){
+            Pair<Integer,Integer>pair = moves.lastElement();
+            moves.pop();
+            board.cells[pair.getKey()][pair.getValue()].content = State.EMPTY;
+        }
+    }
+
     private void nextBoard(State whoWon) {
         gameStatus = StatusOfGame.STILL_PLAYING;
         if(isDrawBigBoard()){
@@ -64,13 +92,13 @@ public class TicTacToe {
             if(gameStatus == StatusOfGame.CROSS_WON){
                 System.out.println("X won!! in the entire board.");
             }
-            else if(gameStatus == StatusOfGame.ZERO_WON){
+            else if(gameStatus == StatusOfGame.ZERO_WON) {
                 System.out.println("0 won!! in the entire board.");
             }
             return;
         }
         boardNumber++;
-        System.out.println("switching to board no. " + boardNumber + 1);
+        System.out.println("switching to board no. " + (boardNumber + 1));
         initGame();
     }
 
@@ -137,6 +165,9 @@ public class TicTacToe {
             int row = in.nextInt()-1;
             int col = in.nextInt()-1;
 
+            Pair<Integer,Integer> pair = new Pair<>(row,col);
+            moves.push(pair);
+
             if(row>=0 && row<Board.ROWS && col>=0 && col<Board.COLS &&
                     board.cells[row][col].content == State.EMPTY){
                 board.cells[row][col].content = currState;
@@ -157,6 +188,7 @@ public class TicTacToe {
         System.out.println("Type h for Human to Human game and c for Human to Computer game: ");
         String input = in.next();
         gameMode = (input.equals("h"))? GameMode.HUMAN_TO_HUMAN:GameMode.HUMAN_TO_COMPUTER;
+        moves.clear();
     }
 
     public void check(State currState){
