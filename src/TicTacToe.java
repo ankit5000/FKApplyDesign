@@ -6,6 +6,7 @@ import java.util.Stack;
 public class TicTacToe {
 
     boolean start = true;
+    private Hexa hexa;
     private Board board;
     private StatusOfGame gameStatus;
     private State curr;
@@ -22,6 +23,12 @@ public class TicTacToe {
     Stack<Pair<Integer,Integer>> moves = new Stack<>();
 
     public TicTacToe(){
+
+        System.out.println("Type hex for starting the hexagonal tic-tac-toe: ");
+        String startHexa = in.next();
+        if(startHexa.equals("hex")){
+            playHexa();
+        }
 
         initBigBoard();
         board = new Board();
@@ -75,6 +82,46 @@ public class TicTacToe {
             turnPlayer1 = !turnPlayer1;
 
         }while(gameStatus == StatusOfGame.STILL_PLAYING);
+    }
+
+    private void playHexa() {
+        gameStatus = StatusOfGame.STILL_PLAYING;
+        hexa = new Hexa();
+        hexa.init();
+
+        do{
+            hexTurn(curr);
+            hexa.printGrid();
+            if(hexa.check(curr)){
+                if(curr==State.CROSS){
+                    System.out.println("X won!!");
+                    gameStatus = StatusOfGame.CROSS_WON;
+                }
+            }
+            curr = (curr == State.CROSS)? State.ZERO : State.CROSS;
+        }while(gameStatus == StatusOfGame.STILL_PLAYING);
+    }
+
+    private void hexTurn(State currState){
+        boolean validInput = false;
+        do {
+            if(currState == State.CROSS){
+                System.out.print("Player 'X', enter your move(row[1-7] col[1-13]): ");
+            } else {
+                System.out.print("Player '0', enter your move(row[1-7] col[1-13]): ");
+            }
+            int row = in.nextInt()-1;
+            int col = in.nextInt()-1;
+
+            if(row>=0 && row<Hexa.ROWS && col>=0 && col<Hexa.COLS &&
+                    hexa.hexaGrid[row][col].content == State.EMPTY){
+                hexa.hexaGrid[row][col].content = currState;
+                validInput = true;
+            } else {
+                System.out.println("This move at (" +(row-1)+","+(col+1)+") is not"
+                        + "valid. Try again...");
+            }
+        } while(!validInput);
     }
 
     private void undo() {
