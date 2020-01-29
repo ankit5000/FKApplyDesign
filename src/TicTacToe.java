@@ -96,7 +96,7 @@ public class TicTacToe {
         }
 
         gameStatus = StatusOfGame.STILL_PLAYING;
-        if(isDrawBigBoard()){
+        if(isDrawBigBoard(bigBoard)){
             gameStatus = StatusOfGame.DRAW;
             System.out.println("It's a draw in the entire board.");
             return;
@@ -116,7 +116,7 @@ public class TicTacToe {
         initGame();
     }
 
-    private boolean isDrawBigBoard() {
+    public boolean isDrawBigBoard(Cell[][] bigBoard) {
         for(int row = 0; row< Board.ROWS; ++row){
             for(int col = 0; col< Board.COLS; ++col){
                 if(bigBoard[row][col].content == State.EMPTY) {
